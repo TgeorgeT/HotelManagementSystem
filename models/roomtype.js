@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   RoomType.init({
-    id: DataTypes.INTEGER,
     description: DataTypes.STRING,
     capacity: DataTypes.INTEGER
   }, {
