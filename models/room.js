@@ -1,25 +1,30 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class RoomType extends Model {
+  class Room extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.RoomType.hasMany(models.Room, {});
+      models.Room.belongsTo(models.RoomType, {
+        onDelete: "CASCADE",
+      });
+      models.Room.belongsToMany(models.Booking, {
+        through: "BookedRooms",
+      });
     }
   }
-  RoomType.init(
+  Room.init(
     {
-      description: DataTypes.STRING,
-      capacity: DataTypes.INTEGER,
+      price: DataTypes.FLOAT,
+      roomTypeId: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "RoomType",
+      modelName: "Room",
     }
   );
-  return RoomType;
+  return Room;
 };
