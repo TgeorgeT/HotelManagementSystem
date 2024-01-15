@@ -4,15 +4,25 @@ const { randEmail, randFullName, randPassword } = require("@ngneat/falso");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const data = new Array(20).fill().map(() => ({
+    var data = new Array(20).fill().map(() => ({
       name: randFullName(),
       email: randEmail(),
       password: randPassword(),
+      role: "user",
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
 
-    data.concat;
+   data = data.concat(
+      new Array(2).fill().map(() => ({
+        name: randFullName(),
+      email: randEmail(),
+      password: randPassword(),
+      role: "admin",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      }))
+    ); 
 
     await queryInterface.bulkInsert("Users", data, {});
   },

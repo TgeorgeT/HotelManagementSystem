@@ -11,7 +11,7 @@ const checkAuthorization = async (headers) => {
   }
 
   try {
-    const token = authorizationHeader; // Assuming format: Bearer <token>
+    const token = authorizationHeader; // Assuming format: authorization <token>
     const decoded = jwt.verify(token, JWT_SECRET);
 
     const userId = decoded.userId;
@@ -26,8 +26,14 @@ const checkAuthorization = async (headers) => {
     if (!user) {
       return null; // Return null for user not found
     }
-    console.log("Found a user based on token");
-    return user;
+    // console.log("Found a user based on token");
+
+    // we dont want the password field in the context for security reasons
+
+    const userWithoutPassword = { ...user.dataValues };
+    delete userWithoutPassword.password;
+
+    return userWithoutPassword;
   } catch (error) {
     return null; // Return null for invalid token
   }
