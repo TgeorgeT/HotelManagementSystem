@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require("graphql");
-const loginResolver = require("../resolvers/loginResolver");
-const AuthType = require("../types/AuthType");
+const loginResolver = require("../../resolvers/user/loginResolver");
+const AuthType = require("../../types/user/AuthType");
 
 const login = {
   type: AuthType,
