@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       models.Room.belongsToMany(models.Booking, {
         through: "BookedRooms",
       });
+      models.Room.hasMany(models.BookedRooms, {});
     }
   }
   Room.init(

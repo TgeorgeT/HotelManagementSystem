@@ -1,6 +1,6 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require("graphql");
 
-const { RoleEnumType } = require("./enums/RoleEnumType");
+const { RoleEnumType } = require("../enums/RoleEnumType");
 
 const UserType = new GraphQLObjectType({
   name: "User",

@@ -13,6 +13,14 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
       roomTypeId: {
         type: Sequelize.INTEGER,
         allowNull: false,

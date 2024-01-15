@@ -5,7 +5,7 @@ const {
   GraphQLEnumType,
 } = require("graphql");
 
-const { RoleEnumType } = require("./enums/RoleEnumType");
+const { RoleEnumType } = require("../enums/RoleEnumType");
 
 const userInputType = new GraphQLInputObjectType({
   name: "UserInputType",
