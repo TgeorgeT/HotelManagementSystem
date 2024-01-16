@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const db = require("../models");
-const JWT_SECRET = "jwtsecret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // to do for later - add jwt secret key to environment variable and change logic from sending nulls everywhere
 

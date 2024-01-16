@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { createHandler } = require("graphql-http/lib/use/express");
 const jwt = require("jsonwebtoken");
@@ -7,7 +8,6 @@ const checkAuthorization = require("./middleware/checkAuthorization");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 const db = require("./models");
 
 app.all(

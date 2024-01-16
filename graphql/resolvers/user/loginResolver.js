@@ -1,12 +1,12 @@
 const db = require("../../../models");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-const JWT_SECRET = "jwtsecret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const loginResolver = async (_, args, context) => {
   console.log(_);
   console.log(args);
-  console.log(JWT_SECRET);
 
   const { email, password } = args;
 
@@ -14,30 +14,32 @@ const loginResolver = async (_, args, context) => {
   const user = await db.User.findOne({
     where: {
       email: email,
-      password: password,
     },
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new Error("User not found!");
+  } else {
+    const hashedPassword = user.password;
+    const passwordMatch = await bcrypt.compare(password, hashedPassword);
+    if (passwordMatch) {
+      // for the seeders to work, on deployment this should be deleted
+      // Passwords match
+      // Generate a JWT token
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+        expiresIn: "1h",
+      });
+
+      return {
+        token,
+        user,
+      };
+    } else {
+      // Passwords do not match
+      console.log("Passwords do not match");
+      throw new Error("Incorrect username or password!");
+    }
   }
-
-  // to do - check for matching password hashes instead of directly finding correspondent
-
-  // Compare the provided password with the hashed password in the database
-  //   const passwordMatch = await bcrypt.compare(password, user.password);
-
-  //   if (!passwordMatch) {
-  //     throw new Error("Invalid password");
-  //   }
-
-  // Generate a JWT token
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
-
-  return {
-    token,
-    user,
-  };
 };
 
 module.exports = loginResolver;

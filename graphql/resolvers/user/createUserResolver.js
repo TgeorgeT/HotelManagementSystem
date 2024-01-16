@@ -1,21 +1,25 @@
 const db = require("../../../models");
+const bcrypt = require("bcrypt");
 
 const createUserResolver = async (_, { user }, context) => {
   const { name, email, password, role } = user;
   console.log("Context user: ", context.user);
 
-  // checking if we are logged in or the roles of the logged in user after updating user schema
-  if (context.user && context.user.role === "admin") {
+  // To check if we are logged in we check if there is a context.user / for role - context.user.role === "admin"
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
+
     const newUser = await db.User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role,
     });
 
     return newUser;
-  } else {
-    throw new Error("Unauthorized!");
+  } catch (error) {
+    throw new Error("Error hashing or creating user!");
   }
 };
 
