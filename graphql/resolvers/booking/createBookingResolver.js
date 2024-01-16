@@ -1,42 +1,39 @@
 const db = require("../../../models");
 
-const createBookingResolver = async (_, { booking }, context) => {
-    // const { userId, sizeTwoRoomCount, sizeFourRoomCount, checkInDate, checkOutDate } = booking;
+async function createBookingResolver(parent, args, context) {
+  const { userId, checkInDate, checkOutDate, roomIDs } = args;
 
-    // // checking if we are logged in or the roles of the logged in user after updating user schema
-    // if (context.user) {
+  try {
+    const rooms = await db.Room.findAll({
+      where: { id: roomIDs },
+    });
 
-    //     // validate the booking object
-    //     const validationError = validateBooking(booking);
-    //     if (validationError.length > 0) {
-    //         return {
-    //             "error": validationError
-    //         };
-    //     }
+    const totalPrice = rooms.reduce((acc, room) => {
+      return acc + room.price;
+    }, 0);
 
-    //     // check if there are available rooms for the given dates
-    //     // const availableSizeTwoRooms = await db.Room.find({
+    const newBooking = await db.Booking.create({
+      userId,
+      checkInDate,
+      checkOutDate,
+      totalPrice,
+    });
 
-    //     // });
+    if (roomIDs && roomIDs.length > 0) {
+      await Promise.all(
+        roomIDs.map((roomId) => {
+          return db.BookedRooms.create({
+            roomId,
+            bookingId: newBooking.id,
+          });
+        })
+      );
+    }
 
+    return newBooking;
+  } catch (error) {
+    throw new Error("Error creating booking: " + error.message);
+  }
+}
 
-
-    //     // if (availableRooms.length === 0) {
-    //     //     return {
-    //     //         "error": "No available rooms for the given dates."
-    //     //     };
-    //     // }
-
-    //     // const newBooking = await db.Booking.create({
-    //     //     userId,
-    //     //     sizeTwoRoomCount,
-    //     //     sizeFourRoomCount,
-    //     //     checkInDate,
-    //     //     checkOutDate,
-    //     // });
-
-    //     return newBooking;
-    // } else {
-    //     return "Unauthorized!";
-    // }
-};
+module.exports = createBookingResolver;

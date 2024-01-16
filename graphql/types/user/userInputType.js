@@ -19,9 +19,6 @@ const userInputType = new GraphQLInputObjectType({
     password: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    role: {
-      type: new GraphQLNonNull(RoleEnumType),
-    },
   },
 });
 

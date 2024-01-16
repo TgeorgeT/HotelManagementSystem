@@ -2,7 +2,7 @@ const db = require("../../../models");
 const bcrypt = require("bcrypt");
 
 const createUserResolver = async (_, { user }, context) => {
-  const { name, email, password, role } = user;
+  const { name, email, password } = user;
   console.log("Context user: ", context.user);
 
   // To check if we are logged in we check if there is a context.user / for role - context.user.role === "admin"
@@ -14,7 +14,7 @@ const createUserResolver = async (_, { user }, context) => {
       name,
       email,
       password: hashedPassword,
-      role,
+      role: "user",
     });
 
     return newUser;

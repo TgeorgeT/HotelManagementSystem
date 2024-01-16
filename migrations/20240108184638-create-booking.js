@@ -10,15 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       checkInDate: {
+        allowNull: true,
         type: Sequelize.DATE,
       },
       checkOutDate: {
+        allowNull: true,
         type: Sequelize.DATE,
       },
       totalPrice: {
+        allowNull: true,
         type: Sequelize.FLOAT,
       },
       timestamp: {
+        allowNuLL: true,
         type: Sequelize.DATE,
       },
       userId: {
@@ -33,7 +37,7 @@ module.exports = {
       },
       paymentId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: {
             tableName: "payments",

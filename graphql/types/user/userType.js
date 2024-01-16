@@ -1,6 +1,14 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID } = require("graphql");
+const {
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+} = require("graphql");
 
 const { RoleEnumType } = require("../enums/RoleEnumType");
+const BookingType = require("../booking/bookingType");
+
+const db = require("../../../models");
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -16,6 +24,17 @@ const UserType = new GraphQLObjectType({
     },
     role: {
       type: RoleEnumType,
+    },
+
+    bookings: {
+      type: new GraphQLList(BookingType),
+      resolve(parent, args) {
+        return db.Booking.findAll({
+          where: {
+            userId: parent.id,
+          },
+        });
+      },
     },
   },
 });
