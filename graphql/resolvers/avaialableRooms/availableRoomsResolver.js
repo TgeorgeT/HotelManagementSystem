@@ -5,6 +5,10 @@ const availableRoomsResolver = async (_, { startDate, endDate }, context) => {
   const checkInDate = new Date(startDate);
   const checkOutDate = new Date(endDate);
 
+  if (!context.user) {
+    throw new Error("Unauthorized");
+  }
+
   const roomsWithBookings = await db.Room.findAll({
     include: [
       {

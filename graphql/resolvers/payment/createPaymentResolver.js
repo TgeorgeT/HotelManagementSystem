@@ -3,6 +3,8 @@ const db = require("../../../models");
 async function createPaymentResolver(parent, args, context) {
   const { bookingId, paymentDate, paymentType } = args;
 
+  if (!context.user) throw new Error("Unauthorized");
+
   try {
     const newPayment = await db.Payment.create({
       paymentDate,
